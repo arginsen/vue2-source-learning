@@ -14,7 +14,9 @@ const idToTemplate = cached(id => {
   return el && el.innerHTML
 })
 
+// 先保留挂载方法
 const mount = Vue.prototype.$mount
+// 对挂载方法拦截加入编译处理 temlpate => render，再调用 mount 执行挂载；可对比只有运行时的版本
 Vue.prototype.$mount = function (
   el?: string | Element,
   hydrating?: boolean

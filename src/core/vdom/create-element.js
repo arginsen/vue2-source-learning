@@ -25,6 +25,7 @@ const ALWAYS_NORMALIZE = 2
 
 // wrapper function for providing a more flexible interface
 // without getting yelled at by flow
+// 封装 createElement 的接口，返回调用具体的创建步骤
 export function createElement (
   context: Component,
   tag: any,

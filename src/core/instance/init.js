@@ -66,7 +66,7 @@ export function initMixin (Vue: Class<Component>) {
     }
 
     if (vm.$options.el) {
-      vm.$mount(vm.$options.el)
+      vm.$mount(vm.$options.el) // 若当前组件参数中有节点，则执行挂载操作
     }
   }
 }

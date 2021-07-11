@@ -88,6 +88,8 @@ export function renderMixin (Vue: Class<Component>) {
       // separately from one another. Nested component's render fns are called
       // when parent component is patched.
       currentRenderingInstance = vm
+      // render的this指向挂载的代理，传入render函数的参数vm.$createElement是初始化时定义的，
+      // 而render： h => h() 此时就为 vm.$createElement => vm.$createElement(vm, )
       vnode = render.call(vm._renderProxy, vm.$createElement)
     } catch (e) {
       handleError(e, vm, `render`)
@@ -105,7 +107,7 @@ export function renderMixin (Vue: Class<Component>) {
         vnode = vm._vnode
       }
     } finally {
-      currentRenderingInstance = null
+      currentRenderingInstance = null // 最后将正在render的实例对象重置
     }
     // if the returned array contains only a single node, allow it
     if (Array.isArray(vnode) && vnode.length === 1) {

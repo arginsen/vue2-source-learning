@@ -2,6 +2,7 @@
 
 import { namespaceMap } from 'web/util/index'
 
+// 定义操作dom、节点的各类接口
 export function createElement (tagName: string, vnode: VNode): Element {
   const elm = document.createElement(tagName)
   if (tagName !== 'select') {

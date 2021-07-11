@@ -34,19 +34,21 @@ export function initLifecycle (vm: Component) {
 
   // locate first non-abstract parent
   let parent = options.parent
-  if (parent && !options.abstract) {
+  if (parent && !options.abstract) { // 如果存在父级
     while (parent.$options.abstract && parent.$parent) {
-      parent = parent.$parent
+      parent = parent.$parent // 定位至第一个不抽象的父级
     }
-    parent.$children.push(vm)
+    parent.$children.push(vm) // 将当前组件作为该父级的子级
   }
 
   vm.$parent = parent
-  vm.$root = parent ? parent.$root : vm
+  vm.$root = parent ? parent.$root : vm // 如无父级，则组件的根级就是自己
 
+  // 初始化组件的子级组、ref
   vm.$children = []
   vm.$refs = {}
 
+  // 初始化生命周期系列内部属性
   vm._watcher = null
   vm._inactive = null
   vm._directInactive = false
@@ -56,27 +58,28 @@ export function initLifecycle (vm: Component) {
 }
 
 export function lifecycleMixin (Vue: Class<Component>) {
+  // 给 Vue 原型上定义
   Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
     const vm: Component = this
-    const prevEl = vm.$el
+    const prevEl = vm.$el // 将当前的元素节点存为前一个
     const prevVnode = vm._vnode
     const restoreActiveInstance = setActiveInstance(vm)
     vm._vnode = vnode
     // Vue.prototype.__patch__ is injected in entry points
     // based on the rendering backend used.
-    if (!prevVnode) {
+    if (!prevVnode) { // 如不存在先前节点，说明为首次挂载，如有则做更新
       // initial render
       vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */)
     } else {
       // updates
-      vm.$el = vm.__patch__(prevVnode, vnode)
+      vm.$el = vm.__patch__(prevVnode, vnode) // 前两个参数分别为待替换节点、用来替换的节点；其后均为可选参数，首次传入
     }
-    restoreActiveInstance()
+    restoreActiveInstance() // 恢复活动实例
     // update __vue__ reference
-    if (prevEl) {
+    if (prevEl) { // 如有前节点，去掉
       prevEl.__vue__ = null
     }
-    if (vm.$el) {
+    if (vm.$el) { // 
       vm.$el.__vue__ = vm
     }
     // if parent is an HOC, update its $el as well
@@ -143,9 +146,9 @@ export function mountComponent (
   el: ?Element,
   hydrating?: boolean
 ): Component {
-  vm.$el = el
-  if (!vm.$options.render) {
-    vm.$options.render = createEmptyVNode
+  vm.$el = el // 挂在组件时存储 $el
+  if (!vm.$options.render) { // 如果有配置没有传入的 render
+    vm.$options.render = createEmptyVNode // 返回一个虚拟节点
     if (process.env.NODE_ENV !== 'production') {
       /* istanbul ignore if */
       if ((vm.$options.template && vm.$options.template.charAt(0) !== '#') ||
@@ -176,12 +179,12 @@ export function mountComponent (
       const endTag = `vue-perf-end:${id}`
 
       mark(startTag)
-      const vnode = vm._render()
+      const vnode = vm._render() // 生成虚拟节点
       mark(endTag)
       measure(`vue ${name} render`, startTag, endTag)
 
       mark(startTag)
-      vm._update(vnode, hydrating)
+      vm._update(vnode, hydrating) // 更新虚拟节点至dom
       mark(endTag)
       measure(`vue ${name} patch`, startTag, endTag)
     }
@@ -194,6 +197,8 @@ export function mountComponent (
   // we set this to vm._watcher inside the watcher's constructor
   // since the watcher's initial patch may call $forceUpdate (e.g. inside child
   // component's mounted hook), which relies on vm._watcher being already defined
+  // Watcher 在这里起到两个作用，一个是初始化的时候会执行回调函数（标记this.getter为回调函数，后执行this.get()中执行回调），
+  // 另一个是当 vm 实例中的监测的数据发生变化的时候执行回调函数
   new Watcher(vm, updateComponent, noop, {
     before () {
       if (vm._isMounted && !vm._isDestroyed) {
