@@ -16,12 +16,16 @@ export function initExtend (Vue: GlobalAPI) {
   /**
    * Class inheritance
    */
+  // extend 使用一种非常经典的原型继承的方式把一个纯对象转换一个继承于 Vue 的构造器 Sub 并返回，
+  // 然后对 Sub 这个对象本身扩展了一些属性，如扩展 options、添加全局 API 等；
+  // 并且对配置中的 props 和 computed 做了初始化工作；
+  // 最后对于这个 Sub 构造函数做了缓存
   Vue.extend = function (extendOptions: Object): Function {
     extendOptions = extendOptions || {}
     const Super = this
     const SuperId = Super.cid
     const cachedCtors = extendOptions._Ctor || (extendOptions._Ctor = {})
-    if (cachedCtors[SuperId]) {
+    if (cachedCtors[SuperId]) { // 从缓存中找 sub
       return cachedCtors[SuperId]
     }
 
@@ -30,11 +34,11 @@ export function initExtend (Vue: GlobalAPI) {
       validateComponentName(name)
     }
 
-    const Sub = function VueComponent (options) {
+    const Sub = function VueComponent (options) { // 定义构造器
       this._init(options)
     }
-    Sub.prototype = Object.create(Super.prototype)
-    Sub.prototype.constructor = Sub
+    Sub.prototype = Object.create(Super.prototype) // 原型继承
+    Sub.prototype.constructor = Sub // 构造函数为其本身
     Sub.cid = cid++
     Sub.options = mergeOptions(
       Super.options,

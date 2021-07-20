@@ -33,6 +33,7 @@ import {
 } from 'weex/runtime/recycle-list/render-component-template'
 
 // inline hooks to be invoked on component VNodes during patch
+// 在 patch 期间将被激活 init、prepatch、insert、destroy
 const componentVNodeHooks = {
   init (vnode: VNodeWithData, hydrating: boolean): ?boolean {
     if (
@@ -44,11 +45,12 @@ const componentVNodeHooks = {
       const mountedNode: any = vnode // work around flow
       componentVNodeHooks.prepatch(mountedNode, mountedNode)
     } else {
+      // 创建 Vue 实例
       const child = vnode.componentInstance = createComponentInstanceForVnode(
         vnode,
         activeInstance
       )
-      child.$mount(hydrating ? vnode.elm : undefined, hydrating)
+      child.$mount(hydrating ? vnode.elm : undefined, hydrating) // 挂载组件
     }
   },
 
@@ -96,6 +98,7 @@ const componentVNodeHooks = {
   }
 }
 
+// 各钩子函数名
 const hooksToMerge = Object.keys(componentVNodeHooks)
 
 export function createComponent (
@@ -109,9 +112,11 @@ export function createComponent (
     return
   }
 
+  // 实际 baseCtor 就是 Vue
   const baseCtor = context.$options._base
 
   // plain options object: turn it into a constructor
+  // extend 构造一个 Vue 的子类
   if (isObject(Ctor)) {
     Ctor = baseCtor.extend(Ctor)
   }
@@ -183,10 +188,13 @@ export function createComponent (
   }
 
   // install component management hooks onto the placeholder node
+  // 安装组件钩子函数
+  // 将 componentVNodeHooks 的钩子函数合并到 data.hook，在 VNode 执行 patch 时执行钩子函数
   installComponentHooks(data)
 
   // return a placeholder vnode
   const name = Ctor.options.name || tag
+  // 实例化一个 vnode，和普通元素节点的 vnode 不同，组件的 VNode 没有 children
   const vnode = new VNode(
     `vue-component-${Ctor.cid}${name ? `-${name}` : ''}`,
     data, undefined, undefined, undefined, context,
@@ -212,9 +220,9 @@ export function createComponentInstanceForVnode (
   parent: any
 ): Component {
   const options: InternalComponentOptions = {
-    _isComponent: true,
+    _isComponent: true, // 表示为组件
     _parentVnode: vnode,
-    parent
+    parent // 当前激活的组件实例
   }
   // check inline-template render functions
   const inlineTemplate = vnode.data.inlineTemplate
@@ -222,15 +230,16 @@ export function createComponentInstanceForVnode (
     options.render = inlineTemplate.render
     options.staticRenderFns = inlineTemplate.staticRenderFns
   }
-  return new vnode.componentOptions.Ctor(options)
+  return new vnode.componentOptions.Ctor(options) // new Sub(options) 实为继承了 Vue 的子组件构造函数
 }
 
 function installComponentHooks (data: VNodeData) {
   const hooks = data.hook || (data.hook = {})
   for (let i = 0; i < hooksToMerge.length; i++) {
-    const key = hooksToMerge[i]
-    const existing = hooks[key]
-    const toMerge = componentVNodeHooks[key]
+    const key = hooksToMerge[i] // 各钩子函数名
+    const existing = hooks[key] // hook 里边取
+    const toMerge = componentVNodeHooks[key] // 定义里边取
+    // 如果 hook 里没有当前的钩子函数，则拷贝过去
     if (existing !== toMerge && !(existing && existing._merged)) {
       hooks[key] = existing ? mergeHook(toMerge, existing) : toMerge
     }
