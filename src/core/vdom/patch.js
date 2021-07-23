@@ -142,6 +142,7 @@ export function createPatchFunction (backend) {
     }
 
     vnode.isRootInsert = !nested // for transition enter check
+    // 如果组件的根节点是个普通元素，那么 vm._vnode 也是普通的 vnode
     if (createComponent(vnode, insertedVnodeQueue, parentElm, refElm)) {
       return
     }
@@ -212,7 +213,7 @@ export function createPatchFunction (backend) {
     let i = vnode.data
     if (isDef(i)) {
       const isReactivated = isDef(vnode.componentInstance) && i.keepAlive
-      // i 就为 init 钩子函数
+      // i 就为 init 钩子函数，初始化子组件
       if (isDef(i = i.hook) && isDef(i = i.init)) {
         i(vnode, false /* hydrating */) // init(vnode, false)
       }
@@ -705,7 +706,7 @@ export function createPatchFunction (backend) {
       return
     }
 
-    let isInitialPatch = false
+    let isInitialPatch = false // 初始打包
     const insertedVnodeQueue = []
 
     if (isUndef(oldVnode)) { // 旧节点未被定义

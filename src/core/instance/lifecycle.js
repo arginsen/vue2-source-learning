@@ -18,14 +18,14 @@ import {
   invokeWithErrorHandling
 } from '../util/index'
 
-export let activeInstance: any = null
+export let activeInstance: any = null // 全局变量，指当前上下文的 vue 实例
 export let isUpdatingChildComponent: boolean = false
 
 export function setActiveInstance(vm: Component) {
-  const prevActiveInstance = activeInstance
-  activeInstance = vm
+  const prevActiveInstance = activeInstance // 保留当前上下文的 vue 实例
+  activeInstance = vm // 更新当前上下文的 vue 实例
   return () => {
-    activeInstance = prevActiveInstance
+    activeInstance = prevActiveInstance // 当前 vm 完成子组件的 patch 后恢复活动实例至父实例
   }
 }
 
@@ -64,7 +64,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
     const prevEl = vm.$el // 将当前的元素节点存为前一个
     const prevVnode = vm._vnode
     const restoreActiveInstance = setActiveInstance(vm)
-    vm._vnode = vnode
+    vm._vnode = vnode // vm._render() 返回的组件渲染 VNode
     // Vue.prototype.__patch__ is injected in entry points
     // based on the rendering backend used.
     if (!prevVnode) { // 如不存在先前节点，说明为首次挂载，如有则做更新
@@ -74,7 +74,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
       // updates
       vm.$el = vm.__patch__(prevVnode, vnode) // 前两个参数分别为待替换节点、用来替换的节点；其后均为可选参数，首次传入
     }
-    restoreActiveInstance() // 恢复活动实例
+    restoreActiveInstance() // 当前 vm 完成子组件的 patch 后恢复活动实例至父实例
     // update __vue__ reference
     if (prevEl) { // 如有前节点，去掉
       prevEl.__vue__ = null
@@ -147,7 +147,7 @@ export function mountComponent (
   hydrating?: boolean
 ): Component {
   vm.$el = el // 挂在组件时存储 $el
-  if (!vm.$options.render) { // 如果有配置没有传入的 render
+  if (!vm.$options.render) { // 如果人为配置没有传入的 render
     vm.$options.render = createEmptyVNode // 返回一个虚拟节点
     if (process.env.NODE_ENV !== 'production') {
       /* istanbul ignore if */

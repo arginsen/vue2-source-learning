@@ -212,14 +212,7 @@ const builds = {
     external: Object.keys(require('../packages/weex-template-compiler/package.json').dependencies)
   }
 }
-  'web-full-dev': {
-    entry: resolve('web/entry-runtime-with-compiler.js'),
-    dest: resolve('dist/vue.js'),
-    format: 'umd',
-    env: 'development',
-    alias: { he: './entity-decoder' },
-    banner
-  },
+
 function genConfig (name) {
   const opts = builds[name]
   const config = {

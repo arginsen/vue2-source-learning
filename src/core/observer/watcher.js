@@ -77,7 +77,7 @@ export default class Watcher {
       : ''
     // parse expression for getter
     if (typeof expOrFn === 'function') {
-      this.getter = expOrFn
+      this.getter = expOrFn // updateComponent 函数
     } else {
       this.getter = parsePath(expOrFn)
       if (!this.getter) {
@@ -92,7 +92,7 @@ export default class Watcher {
     }
     this.value = this.lazy
       ? undefined
-      : this.get()
+      : this.get() // 新实例直接执行
   }
 
   /**

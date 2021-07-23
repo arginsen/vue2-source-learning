@@ -46,6 +46,7 @@ const componentVNodeHooks = {
       componentVNodeHooks.prepatch(mountedNode, mountedNode)
     } else {
       // 创建 Vue 实例
+      // activeInstance 从 lifecycle 获取，指当前上下文的 vue 实例，在此作为父实例传入函数
       const child = vnode.componentInstance = createComponentInstanceForVnode(
         vnode,
         activeInstance
@@ -220,9 +221,9 @@ export function createComponentInstanceForVnode (
   parent: any
 ): Component {
   const options: InternalComponentOptions = {
-    _isComponent: true, // 表示为组件
+    _isComponent: true, // 表示为组件，通过创建子组件来的
     _parentVnode: vnode,
-    parent // 当前激活的组件实例
+    parent
   }
   // check inline-template render functions
   const inlineTemplate = vnode.data.inlineTemplate
