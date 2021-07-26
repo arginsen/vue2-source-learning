@@ -18,6 +18,7 @@ function createFunction (code, errors) {
   }
 }
 
+// 定义了 createCompileToFunctionFn(compile) 函数，接收 compile 函数为参数，返回 compileToFunctions 函数，在 $mount 时被调用
 export function createCompileToFunctionFn (compile: Function): Function {
   const cache = Object.create(null)
 
@@ -26,7 +27,7 @@ export function createCompileToFunctionFn (compile: Function): Function {
     options?: CompilerOptions,
     vm?: Component
   ): CompiledFunctionResult {
-    options = extend({}, options)
+    options = extend({}, options) // 将 options 的属性混入一个空对象
     const warn = options.warn || baseWarn
     delete options.warn
 
@@ -57,7 +58,7 @@ export function createCompileToFunctionFn (compile: Function): Function {
     }
 
     // compile
-    const compiled = compile(template, options)
+    const compiled = compile(template, options) // 将模板与编译配置传入 compile 函数
 
     // check compilation errors/tips
     if (process.env.NODE_ENV !== 'production') {

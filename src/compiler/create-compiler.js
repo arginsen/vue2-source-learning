@@ -4,6 +4,8 @@ import { extend } from 'shared/util'
 import { detectErrors } from './error-detector'
 import { createCompileToFunctionFn } from './to-function'
 
+// 定义的函数 createCompilerCreator(baseCompile) 返回 createCompiler(baseOptions) 函数
+// createCompiler 继续返回一个对象，包含 [其内定义的 compile 函数] 以及 [createCompileToFunctionFn(compile) 执行结果 compileToFunctions ]
 export function createCompilerCreator (baseCompile: Function): Function {
   return function createCompiler (baseOptions: CompilerOptions) {
     function compile (
@@ -39,7 +41,7 @@ export function createCompilerCreator (baseCompile: Function): Function {
         // merge custom modules
         if (options.modules) {
           finalOptions.modules =
-            (baseOptions.modules || []).concat(options.modules)
+            (baseOptions.modules || []).concat(options.modules) // 将
         }
         // merge custom directives
         if (options.directives) {

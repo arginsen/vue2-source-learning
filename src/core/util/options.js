@@ -103,7 +103,7 @@ export function mergeDataOrFn (
   } else {
     return function mergedInstanceDataFn () {
       // instance merge
-      const instanceData = typeof childVal === 'function'
+      const instanceData = typeof childVal === 'function' // 获取实例的数据
         ? childVal.call(vm, vm)
         : childVal
       const defaultData = typeof parentVal === 'function'

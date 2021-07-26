@@ -14,7 +14,7 @@ const idToTemplate = cached(id => {
   return el && el.innerHTML
 })
 
-// 先保留挂载方法
+// 先保留挂载方法 - 原型
 const mount = Vue.prototype.$mount
 // 对挂载方法拦截加入编译处理 temlpate => render，再调用 mount 执行挂载；可对比只有运行时的版本
 Vue.prototype.$mount = function (
@@ -31,7 +31,7 @@ Vue.prototype.$mount = function (
     return this
   }
 
-  const options = this.$options
+  const options = this.$options // 为合并后的配置项
   // resolve template/el and convert to render function
   if (!options.render) {
     let template = options.template
@@ -64,13 +64,19 @@ Vue.prototype.$mount = function (
         mark('compile')
       }
 
+      // compileToFunctions 函数由 ./compiler/index 文件 createCompiler(baseOptions) 执行返回的对象中获取
+      // baseOptions 作为基本编译配置被传入到 compiler/index 文件中 createCompiler = createCompilerCreator(baseCompile) 函数执行后返回的函数中
+      // 也就是 createCompilerCreator 以 baseCompile 函数为参数执行 , 返回的函数被传入之前的配置 baseOptions , 后赋值给 createCompiler 函数
+      // createCompiler 函数内定义的 compile 函数使用 baseCompile 函数来进行编译 , 并将结果返回
+      // createCompiler 函数再将 compile 函数与 createCompileToFunctionFn(compile) 的执行结果 compileToFunctions 打包成对象一并返回
+      // 而此处调用的 compileToFunctions 实际上就是 createCompileToFunctionFn(compile) 执行返回的同名函数 compileToFunctions , 接收以下三个参数
       const { render, staticRenderFns } = compileToFunctions(template, {
         outputSourceRange: process.env.NODE_ENV !== 'production',
         shouldDecodeNewlines,
         shouldDecodeNewlinesForHref,
         delimiters: options.delimiters,
         comments: options.comments
-      }, this)
+      }, this) // 传入编译的配置
       options.render = render
       options.staticRenderFns = staticRenderFns
 
@@ -98,6 +104,6 @@ function getOuterHTML (el: Element): string {
   }
 }
 
-Vue.compile = compileToFunctions
+Vue.compile = compileToFunctions // 保存编译函数到 Vue 构造函数上
 
 export default Vue

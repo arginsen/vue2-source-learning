@@ -28,6 +28,7 @@ import {
   isReservedAttribute
 } from '../util/index'
 
+// defineProperty 拦截属性的配置
 const sharedPropertyDefinition = {
   enumerable: true,
   configurable: true,
@@ -35,22 +36,22 @@ const sharedPropertyDefinition = {
   set: noop
 }
 
-export function proxy (target: Object, sourceKey: string, key: string) {
+export function proxy (target: Object, sourceKey: string, key: string) { // target: Vue, sourceKey: _data, key: 具体的每个数据
   sharedPropertyDefinition.get = function proxyGetter () {
     return this[sourceKey][key]
   }
   sharedPropertyDefinition.set = function proxySetter (val) {
     this[sourceKey][key] = val
   }
-  Object.defineProperty(target, key, sharedPropertyDefinition)
+  Object.defineProperty(target, key, sharedPropertyDefinition) // sharedPropertyDefinition 给 key 定义 set/get 属性
 }
 
 export function initState (vm: Component) {
   vm._watchers = []
-  const opts = vm.$options
+  const opts = vm.$options // 外界传入值的一些初始化
   if (opts.props) initProps(vm, opts.props)
   if (opts.methods) initMethods(vm, opts.methods)
-  if (opts.data) {
+  if (opts.data) { // 有就初始化，没有先观察，看外界传入不传入
     initData(vm)
   } else {
     observe(vm._data = {}, true /* asRootData */)
@@ -109,9 +110,10 @@ function initProps (vm: Component, propsOptions: Object) {
   toggleObserving(true)
 }
 
+// 将数据劫持，做响应式处理
 function initData (vm: Component) {
   let data = vm.$options.data
-  data = vm._data = typeof data === 'function'
+  data = vm._data = typeof data === 'function' // 定义 data 必须为一个函数
     ? getData(data, vm)
     : data || {}
   if (!isPlainObject(data)) {
@@ -144,11 +146,11 @@ function initData (vm: Component) {
         vm
       )
     } else if (!isReserved(key)) {
-      proxy(vm, `_data`, key)
+      proxy(vm, `_data`, key) // 在 Vue 下新增 _data 保存数据，并对该属性做响应式处理
     }
   }
   // observe data
-  observe(data, true /* asRootData */)
+  observe(data, true /* asRootData */) // 对数据本身做响应式处理
 }
 
 export function getData (data: Function, vm: Component): any {

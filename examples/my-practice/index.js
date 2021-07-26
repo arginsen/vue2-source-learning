@@ -1,6 +1,6 @@
 const vm = new Vue({
     el: '#app',
-    data(){
+    data() {
         return {
             text: 'first mount data: \n' + new Date(),
             data: 'confirm'
@@ -10,7 +10,7 @@ const vm = new Vue({
 
 console.log(vm.$data.text); // 获取数据
 
-document.getElementById('update').addEventListener('click', function(){
+document.getElementById('update').addEventListener('click', function(){ 
   vm.$data.text = 'second mount data: \n' + new Date();
 })
 

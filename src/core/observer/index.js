@@ -43,7 +43,7 @@ export class Observer {
     this.value = value
     this.dep = new Dep()
     this.vmCount = 0
-    def(value, '__ob__', this)
+    def(value, '__ob__', this) // 给传入的属性新增属性 __ob__ 标记，值为当前的 Observer 对象，表示已注册过 Observer
     if (Array.isArray(value)) {
       if (hasProto) {
         protoAugment(value, arrayMethods)
@@ -121,7 +121,7 @@ export function observe (value: any, asRootData: ?boolean): Observer | void {
     Object.isExtensible(value) &&
     !value._isVue
   ) {
-    ob = new Observer(value)
+    ob = new Observer(value) // 给数据新建响应式处理
   }
   if (asRootData && ob) {
     ob.vmCount++

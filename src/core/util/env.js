@@ -48,7 +48,7 @@ export const isServerRendering = () => {
       _isServer = false
     }
   }
-  return _isServer
+  return _isServer // 初始化数据时获得当前是否服务端的判断
 }
 
 // detect devtools

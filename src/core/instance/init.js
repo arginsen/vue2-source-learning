@@ -36,7 +36,7 @@ export function initMixin (Vue: Class<Component>) {
       initInternalComponent(vm, options)
     } else {
       vm.$options = mergeOptions(
-        resolveConstructorOptions(vm.constructor),
+        resolveConstructorOptions(vm.constructor), // vue 的构造器
         options || {},
         vm
       )
@@ -54,9 +54,9 @@ export function initMixin (Vue: Class<Component>) {
     initRender(vm)
     callHook(vm, 'beforeCreate')
     initInjections(vm) // resolve injections before data/props
-    initState(vm)
+    initState(vm) // 截至 created 函数前，vue 实例上的数据都准备好了
     initProvide(vm) // resolve provide after data/props
-    callHook(vm, 'created')
+    callHook(vm, 'created') // 此时执行 created 钩子函数，数据已准备好
 
     /* istanbul ignore if */
     if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
