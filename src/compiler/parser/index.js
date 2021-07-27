@@ -201,6 +201,7 @@ export function parse (
     }
   }
 
+  // 传入模板，以及一个配置对象
   parseHTML(template, {
     warn,
     expectHTML: options.expectHTML,
@@ -249,6 +250,7 @@ export function parse (
         })
       }
 
+      // 判断是否为禁止的 tag 和服务端渲染
       if (isForbiddenTag(element) && !isServerRendering()) {
         element.forbidden = true
         process.env.NODE_ENV !== 'production' && warn(
@@ -260,6 +262,7 @@ export function parse (
       }
 
       // apply pre-transforms
+      // 对创建的 ASTElement 做预转换
       for (let i = 0; i < preTransforms.length; i++) {
         element = preTransforms[i](element, options) || element
       }
@@ -277,11 +280,13 @@ export function parse (
         processRawAttrs(element)
       } else if (!element.processed) {
         // structural directives
+        // 构建以前命令
         processFor(element)
         processIf(element)
         processOnce(element)
       }
 
+      // 如果不存在 root 则将新建的 element 作为 root ,在检查 root 的约束条件 , 有问题的 tag 及 属性 v-for 均不能在 root 存在
       if (!root) {
         root = element
         if (process.env.NODE_ENV !== 'production') {
@@ -912,6 +917,7 @@ function parseModifiers (name: string): Object | void {
   }
 }
 
+// 生成属性对象
 function makeAttrsMap (attrs: Array<Object>): Object {
   const map = {}
   for (let i = 0, l = attrs.length; i < l; i++) {

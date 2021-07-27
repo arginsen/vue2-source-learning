@@ -18,7 +18,7 @@ function createFunction (code, errors) {
   }
 }
 
-// 定义了 createCompileToFunctionFn(compile) 函数，接收 compile 函数为参数，返回 compileToFunctions 函数，在 $mount 时被调用
+// 定义了 createCompileToFunctionFn(compile) 函数，返回 compileToFunctions 函数，在 $mount 时被调用
 export function createCompileToFunctionFn (compile: Function): Function {
   const cache = Object.create(null)
 

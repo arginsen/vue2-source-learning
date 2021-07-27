@@ -6,7 +6,7 @@ import { createCompileToFunctionFn } from './to-function'
 
 // 定义的函数 createCompilerCreator(baseCompile) 返回 createCompiler(baseOptions) 函数
 // createCompiler 继续返回一个对象，包含 [其内定义的 compile 函数] 以及 [createCompileToFunctionFn(compile) 执行结果 compileToFunctions ]
-export function createCompilerCreator (baseCompile: Function): Function {
+export function createCompilerCreator (baseCompile: Function): Function { // 创建一个编译器构造器，用于传递
   return function createCompiler (baseOptions: CompilerOptions) {
     function compile (
       template: string,
@@ -60,6 +60,7 @@ export function createCompilerCreator (baseCompile: Function): Function {
 
       finalOptions.warn = warn
 
+      // 实际进行编译的步骤
       const compiled = baseCompile(template.trim(), finalOptions)
       if (process.env.NODE_ENV !== 'production') {
         detectErrors(compiled.ast, warn)

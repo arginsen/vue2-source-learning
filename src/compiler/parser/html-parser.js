@@ -51,6 +51,7 @@ function decodeAttr (value, shouldDecodeNewlines) {
   return value.replace(re, match => decodingMap[match])
 }
 
+// 解析 HTML
 export function parseHTML (html, options) {
   const stack = []
   const expectHTML = options.expectHTML
@@ -104,7 +105,7 @@ export function parseHTML (html, options) {
         }
 
         // Start tag:
-        const startTagMatch = parseStartTag()
+        const startTagMatch = parseStartTag() // 解析开始的标签，把 template 转化成节点名和属性
         if (startTagMatch) {
           handleStartTag(startTagMatch)
           if (shouldIgnoreFirstNewline(startTagMatch.tagName, html)) {
@@ -184,6 +185,7 @@ export function parseHTML (html, options) {
     html = html.substring(n)
   }
 
+  // 解析开始的标签
   function parseStartTag () {
     const start = html.match(startTagOpen)
     if (start) {
@@ -209,6 +211,7 @@ export function parseHTML (html, options) {
     }
   }
 
+  // 处理开始标签
   function handleStartTag (match) {
     const tagName = match.tagName
     const unarySlash = match.unarySlash
@@ -248,7 +251,7 @@ export function parseHTML (html, options) {
     }
 
     if (options.start) {
-      options.start(tagName, attrs, unary, match.start, match.end)
+      options.start(tagName, attrs, unary, match.start, match.end) // 将解析后的模板挂用传入的配置里 start 函数处理命令等
     }
   }
 
