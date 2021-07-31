@@ -222,7 +222,7 @@ export function parse (
         attrs = guardIESVGBug(attrs)
       }
 
-      let element: ASTElement = createASTElement(tag, attrs, currentParent)
+      let element: ASTElement = createASTElement(tag, attrs, currentParent) // 创建 AST 元素
       if (ns) {
         element.ns = ns
       }
@@ -250,6 +250,7 @@ export function parse (
         })
       }
 
+      // 处理 AST 元素
       // 判断是否为禁止的 tag 和服务端渲染
       if (isForbiddenTag(element) && !isServerRendering()) {
         element.forbidden = true
@@ -281,8 +282,8 @@ export function parse (
       } else if (!element.processed) {
         // structural directives
         // 构建以前命令
-        processFor(element)
-        processIf(element)
+        processFor(element) // 从元素中拿到 v-for 指令的内容，然后分别解析出 for、alias、iterator1、iterator2 等属性的值添加到 AST 的元素
+        processIf(element) // 从元素中拿 v-if 指令的内容
         processOnce(element)
       }
 
@@ -345,7 +346,7 @@ export function parse (
         // remove the whitespace-only node right after an opening tag
         text = ''
       } else if (whitespaceOption) {
-        if (whitespaceOption === 'condense') {
+        if (whitespaceOption === 'condense') { // 如果此处文本样式 whitespace 配置为 condense，有换行符的取消，没有的单空格
           // in condense mode, remove the whitespace node if it contains
           // line break, otherwise condense to a single space
           text = lineBreakRE.test(text) ? '' : ' '
@@ -364,14 +365,14 @@ export function parse (
         let child: ?ASTNode
         if (!inVPre && text !== ' ' && (res = parseText(text, delimiters))) {
           child = {
-            type: 2,
+            type: 2, // 有表达式
             expression: res.expression,
             tokens: res.tokens,
             text
           }
         } else if (text !== ' ' || !children.length || children[children.length - 1].text !== ' ') {
           child = {
-            type: 3,
+            type: 3, // 纯文本
             text
           }
         }

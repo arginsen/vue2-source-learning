@@ -7,7 +7,7 @@ const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g
 const regexEscapeRE = /[-.*+?^${}()|[\]\/\\]/g
 
 const buildRegex = cached(delimiters => {
-  const open = delimiters[0].replace(regexEscapeRE, '\\$&')
+  const open = delimiters[0].replace(regexEscapeRE, '\\$&') // $&	表示与 regexp 相匹配的子串。给前边再加上双反斜杠
   const close = delimiters[1].replace(regexEscapeRE, '\\$&')
   return new RegExp(open + '((?:.|\\n)+?)' + close, 'g')
 })
@@ -21,7 +21,9 @@ export function parseText (
   text: string,
   delimiters?: [string, string]
 ): TextParseResult | void {
-  const tagRE = delimiters ? buildRegex(delimiters) : defaultTagRE
+  // 如果外界用户没有定义 delimiters 分隔符用来传变量，那么就使用 Vue 自带的双括号 {{}}
+  // 如要使用此功能，可以在 new Vue 的时候传入 delimiters 属性： delimiters: ['', '']
+  const tagRE = delimiters ? buildRegex(delimiters) : defaultTagRE 
   if (!tagRE.test(text)) {
     return
   }

@@ -117,7 +117,7 @@ export function parseHTML (html, options) {
 
       let text, rest, next
       if (textEnd >= 0) {
-        rest = html.slice(textEnd)
+        rest = html.slice(textEnd) // 将结尾标签截出
         while (
           !endTag.test(rest) &&
           !startTagOpen.test(rest) &&
@@ -138,7 +138,7 @@ export function parseHTML (html, options) {
       }
 
       if (text) {
-        advance(text.length)
+        advance(text.length) // 更新 index html
       }
 
       if (options.chars && text) {
@@ -225,7 +225,7 @@ export function parseHTML (html, options) {
       }
     }
 
-    const unary = isUnaryTag(tagName) || !!unarySlash
+    const unary = isUnaryTag(tagName) || !!unarySlash // 判断标签是否是一元标签
 
     const l = match.attrs.length
     const attrs = new Array(l)
@@ -245,7 +245,8 @@ export function parseHTML (html, options) {
       }
     }
 
-    if (!unary) {
+    // 将非一元的标签压入栈中，再由 parseRndTag 弹出匹配结束标签
+    if (!unary) { 
       stack.push({ tag: tagName, lowerCasedTag: tagName.toLowerCase(), attrs: attrs, start: match.start, end: match.end })
       lastTag = tagName
     }
@@ -255,7 +256,7 @@ export function parseHTML (html, options) {
     }
   }
 
-  function parseEndTag (tagName, start, end) {
+  function parseEndTag (tagName, start, end) { // 对于
     let pos, lowerCasedTagName
     if (start == null) start = index
     if (end == null) end = index
@@ -263,7 +264,7 @@ export function parseHTML (html, options) {
     // Find the closest opened tag of the same type
     if (tagName) {
       lowerCasedTagName = tagName.toLowerCase()
-      for (pos = stack.length - 1; pos >= 0; pos--) {
+      for (pos = stack.length - 1; pos >= 0; pos--) { // 将栈内标签排出
         if (stack[pos].lowerCasedTag === lowerCasedTagName) {
           break
         }
@@ -291,7 +292,7 @@ export function parseHTML (html, options) {
       }
 
       // Remove the open elements from the stack
-      stack.length = pos
+      stack.length = pos // 清楚 pos 到栈顶的标签
       lastTag = pos && stack[pos - 1].tag
     } else if (lowerCasedTagName === 'br') {
       if (options.start) {

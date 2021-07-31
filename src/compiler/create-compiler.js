@@ -12,7 +12,7 @@ export function createCompilerCreator (baseCompile: Function): Function { // 创
       template: string,
       options?: CompilerOptions
     ): CompiledResult {
-      const finalOptions = Object.create(baseOptions)
+      const finalOptions = Object.create(baseOptions) // 创建 finalOptions 用来合并 base 的和挂载时传入的 options
       const errors = []
       const tips = []
 
@@ -41,17 +41,17 @@ export function createCompilerCreator (baseCompile: Function): Function { // 创
         // merge custom modules
         if (options.modules) {
           finalOptions.modules =
-            (baseOptions.modules || []).concat(options.modules) // 将
+            (baseOptions.modules || []).concat(options.modules) // 合并 baseOptions x options 里模块部分
         }
         // merge custom directives
         if (options.directives) {
-          finalOptions.directives = extend(
+          finalOptions.directives = extend( //  // 合并 baseOptions x options 里指令部分
             Object.create(baseOptions.directives || null),
             options.directives
           )
         }
         // copy other options
-        for (const key in options) {
+        for (const key in options) { //  // 合并 options 里其他配置
           if (key !== 'modules' && key !== 'directives') {
             finalOptions[key] = options[key]
           }
@@ -60,7 +60,7 @@ export function createCompilerCreator (baseCompile: Function): Function { // 创
 
       finalOptions.warn = warn
 
-      // 实际进行编译的步骤
+      // 实际进行编译的步骤 ，此时 finalOptions 为最终的编译配置
       const compiled = baseCompile(template.trim(), finalOptions)
       if (process.env.NODE_ENV !== 'production') {
         detectErrors(compiled.ast, warn)

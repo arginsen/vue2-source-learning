@@ -75,7 +75,7 @@ Vue.prototype.$mount = function (
         outputSourceRange: process.env.NODE_ENV !== 'production',
         shouldDecodeNewlines,
         shouldDecodeNewlinesForHref,
-        delimiters: options.delimiters,
+        delimiters: options.delimiters, // Vue 实例的配置
         comments: options.comments
       }, this) // 传入编译的配置
       options.render = render

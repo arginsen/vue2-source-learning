@@ -18,14 +18,18 @@ const genStaticKeysCached = cached(genStaticKeys)
  *    create fresh nodes for them on each re-render;
  * 2. Completely skip them in the patching process.
  */
+
+// Vue 是数据驱动，是响应式的，但是我们的模板并不是所有数据都是响应式的，也有很多数据是首次渲染后就永远不会变化的
+// 遍历已生成的 AST 树，并侦测完全稳定的副树，而 dom 部分不需要改变
+// 侦测副树我们可以提升它们到常量，以便于我们不需要在每个 re-render 时给它们创建新的节点；在打包过程中完全跳过它们
 export function optimize (root: ?ASTElement, options: CompilerOptions) {
   if (!root) return
   isStaticKey = genStaticKeysCached(options.staticKeys || '')
   isPlatformReservedTag = options.isReservedTag || no
   // first pass: mark all non-static nodes.
-  markStatic(root)
+  markStatic(root) // 标记静态节点
   // second pass: mark static roots.
-  markStaticRoots(root, false)
+  markStaticRoots(root, false) // 标记静态根
 }
 
 function genStaticKeys (keys: string): Function {
@@ -48,7 +52,7 @@ function markStatic (node: ASTNode) {
     ) {
       return
     }
-    for (let i = 0, l = node.children.length; i < l; i++) {
+    for (let i = 0, l = node.children.length; i < l; i++) { // 遍历其所有子节点，递归执行 markStaitic
       const child = node.children[i]
       markStatic(child)
       if (!child.static) {
@@ -84,7 +88,7 @@ function markStaticRoots (node: ASTNode, isInFor: boolean) {
     } else {
       node.staticRoot = false
     }
-    if (node.children) {
+    if (node.children) { // 递归子节点标记静态根
       for (let i = 0, l = node.children.length; i < l; i++) {
         markStaticRoots(node.children[i], isInFor || !!node.for)
       }
@@ -104,7 +108,7 @@ function isStatic (node: ASTNode): boolean {
   if (node.type === 3) { // text
     return true
   }
-  return !!(node.pre || (
+  return !!(node.pre || ( // 使用 v-for 指令是静态元素
     !node.hasBindings && // no dynamic bindings
     !node.if && !node.for && // not v-if or v-for or v-else
     !isBuiltInTag(node.tag) && // not a built-in

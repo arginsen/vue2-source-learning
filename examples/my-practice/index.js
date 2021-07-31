@@ -1,5 +1,6 @@
 const vm = new Vue({
     el: '#app',
+    delimiters: ['$[', ']'],
     data() {
         return {
             text: 'first mount data: \n' + new Date(),
