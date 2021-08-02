@@ -42,7 +42,7 @@ Vue.prototype.$mount = function (
   hydrating?: boolean
 ): Component {
   el = el && inBrowser ? query(el) : undefined // 查找dom
-  return mountComponent(this, el, hydrating)
+  return mountComponent(this, el, hydrating) // 返回当前的vue实例
 }
 
 // devtools global hook

@@ -744,7 +744,7 @@ export function createPatchFunction (backend) {
           }
           // either not server-rendered, or hydration failed.
           // create an empty node and replace it
-          oldVnode = emptyNodeAt(oldVnode) // 转化为空的虚拟节点
+          oldVnode = emptyNodeAt(oldVnode) // 将真是节点转化为空的虚拟节点
         }
 
         // replacing existing element

@@ -25,7 +25,7 @@ export class CodegenState {
     this.options = options
     this.warn = options.warn || baseWarn
     this.transforms = pluckModuleFunction(options.modules, 'transformCode')
-    this.dataGenFns = pluckModuleFunction(options.modules, 'genData')
+    this.dataGenFns = pluckModuleFunction(options.modules, 'genData') // 从模块取出数据生成函数
     this.directives = extend(extend({}, baseDirectives), options.directives)
     const isReservedTag = options.isReservedTag || no
     this.maybeComponent = (el: ASTElement) => !!el.component || !isReservedTag(el.tag)
@@ -57,7 +57,7 @@ export function genElement (el: ASTElement, state: CodegenState): string {
     el.pre = el.pre || el.parent.pre
   }
 
-  if (el.staticRoot && !el.staticProcessed) {
+  if (el.staticRoot && !el.staticProcessed) { // 将 optimize 里标记的静态节点先生成
     return genStatic(el, state)
   } else if (el.once && !el.onceProcessed) {
     return genOnce(el, state)
@@ -582,7 +582,7 @@ function genComponent (
 
 function genProps (props: Array<ASTAttr>): string {
   let staticProps = ``
-  let dynamicProps = ``
+  let dynamicProps = `` // 动态的
   for (let i = 0; i < props.length; i++) {
     const prop = props[i]
     const value = __WEEX__
