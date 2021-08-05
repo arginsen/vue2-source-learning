@@ -41,8 +41,8 @@ export function initExtend (Vue: GlobalAPI) {
     Sub.prototype.constructor = Sub // 构造函数为其本身
     Sub.cid = cid++
     Sub.options = mergeOptions(
-      Super.options,
-      extendOptions
+      Super.options, // 父级 Vue 构造函数的一些配置
+      extendOptions // 子级
     )
     Sub['super'] = Super
 

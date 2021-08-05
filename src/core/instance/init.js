@@ -71,8 +71,9 @@ export function initMixin (Vue: Class<Component>) {
   }
 }
 
+// 将用户传入的配置与组件构造函数sub的配置合并到组件的 $option 属性
 export function initInternalComponent (vm: Component, options: InternalComponentOptions) {
-  const opts = vm.$options = Object.create(vm.constructor.options)
+  const opts = vm.$options = Object.create(vm.constructor.options) // 组件构造函数的配置
   // doing this because it's faster than dynamic enumeration.
   const parentVnode = options._parentVnode
   opts.parent = options.parent

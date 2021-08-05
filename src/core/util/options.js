@@ -386,9 +386,9 @@ function assertObjectType (name: string, value: any, vm: ?Component) {
  * Core utility used in both instantiation and inheritance.
  */
 export function mergeOptions (
-  parent: Object,
-  child: Object,
-  vm?: Component
+  parent: Object, // Vue 构造函数的 option
+  child: Object, // 用户传入的 option
+  vm?: Component // vue 实例
 ): Object {
   if (process.env.NODE_ENV !== 'production') {
     checkComponents(child)
@@ -408,15 +408,16 @@ export function mergeOptions (
   // Only merged options has the _base property.
   if (!child._base) {
     if (child.extends) {
-      parent = mergeOptions(parent, child.extends, vm)
+      parent = mergeOptions(parent, child.extends, vm) // 递归将 extends 合并到 parent
     }
     if (child.mixins) {
       for (let i = 0, l = child.mixins.length; i < l; i++) {
-        parent = mergeOptions(parent, child.mixins[i], vm)
+        parent = mergeOptions(parent, child.mixins[i], vm) // 递归将 mixins 合并到 parent
       }
     }
   }
 
+  // 将 parent 和 child 合并
   const options = {}
   let key
   for (key in parent) {

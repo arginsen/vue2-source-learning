@@ -58,7 +58,7 @@ export function initLifecycle (vm: Component) {
 }
 
 export function lifecycleMixin (Vue: Class<Component>) {
-  // 给 Vue 原型上定义
+  // 给 Vue 原型上定义   vnode 是通过 _render 创建的 vnode
   Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
     const vm: Component = this
     const prevEl = vm.$el // 将当前的元素节点存为前一个

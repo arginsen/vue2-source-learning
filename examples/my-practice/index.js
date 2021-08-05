@@ -1,18 +1,25 @@
-const vm = new Vue({
-    el: '#app',
-    delimiters: ['$[', ']'],
-    data() {
-        return {
-            text: 'first mount data: \n' + new Date(),
-            data: 'confirm'
-        }
+let childComp = {
+  template: '<div>{{msg}}</div>',
+  created() {
+    console.log('child created')
+  },
+  mounted() {
+    console.log('child mounted')
+  },
+  data() {
+    return {
+      msg: 'Hello Vue'
     }
-});
+  }
+}
 
-console.log(vm.$data.text); // 获取数据
-
-document.getElementById('update').addEventListener('click', function(){ 
-  vm.$data.text = 'second mount data: \n' + new Date();
+Vue.mixin({
+  created() {
+    console.log('parent created')
+  }
 })
 
-console.log(vm.$data.text); // 获取数据
+let app = new Vue({
+  el: '#app',
+  render: h => h(childComp)
+})
