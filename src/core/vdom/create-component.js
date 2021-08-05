@@ -71,7 +71,7 @@ const componentVNodeHooks = {
     const { context, componentInstance } = vnode
     if (!componentInstance._isMounted) {
       componentInstance._isMounted = true
-      callHook(componentInstance, 'mounted')
+      callHook(componentInstance, 'mounted') // 组件挂载时执行 mounted 钩子函数
     }
     if (vnode.data.keepAlive) {
       if (context._isMounted) {

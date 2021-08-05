@@ -210,6 +210,8 @@ export function mountComponent (
 
   // manually mounted instance, call mounted on self
   // mounted is called for render-created child components in its inserted hook
+  // $vnode 为父节点，为 null 那说明为根节点初始化
+  // 不是组件的初始化，而是外边用户 new Vue 的初始化过程
   if (vm.$vnode == null) {
     vm._isMounted = true
     callHook(vm, 'mounted')
