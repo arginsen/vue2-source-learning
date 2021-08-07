@@ -80,8 +80,8 @@ if (process.env.NODE_ENV !== 'production') {
       // determine which proxy handler to use
       const options = vm.$options
       const handlers = options.render && options.render._withStripped
-        ? getHandler
-        : hasHandler
+        ? getHandler // 读取代理对象的某个属性
+        : hasHandler // 查询代理对象的某个属性
       vm._renderProxy = new Proxy(vm, handlers)
     } else {
       vm._renderProxy = vm

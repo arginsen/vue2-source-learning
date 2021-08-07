@@ -147,7 +147,7 @@ export function createPatchFunction (backend) {
       return
     }
 
-    const data = vnode.data
+    const data = vnode.data // VNode 的 data
     const children = vnode.children
     const tag = vnode.tag
     if (isDef(tag)) {
@@ -311,7 +311,7 @@ export function createPatchFunction (backend) {
     i = vnode.data.hook // Reuse variable
     if (isDef(i)) {
       if (isDef(i.create)) i.create(emptyNode, vnode)
-      if (isDef(i.insert)) insertedVnodeQueue.push(vnode)
+      if (isDef(i.insert)) insertedVnodeQueue.push(vnode) // 插入的 VNode 队列
     }
   }
 
