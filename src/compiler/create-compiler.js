@@ -12,7 +12,7 @@ export function createCompilerCreator (baseCompile: Function): Function { // 创
       template: string,
       options?: CompilerOptions
     ): CompiledResult {
-      const finalOptions = Object.create(baseOptions) // 创建 finalOptions 用来合并 base 的和挂载时传入的 options
+      const finalOptions = Object.create(baseOptions) // 以 baseOptions 为原型创建 finalOptions 用来合并 base 的和挂载时传入的 options
       const errors = []
       const tips = []
 

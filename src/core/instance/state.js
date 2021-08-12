@@ -301,7 +301,7 @@ function initWatch (vm: Component, watch: Object) {
     }
   }
 }
-
+ 
 function createWatcher (
   vm: Component,
   expOrFn: string | Function,

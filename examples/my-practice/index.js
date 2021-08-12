@@ -78,5 +78,27 @@ let app = new Vue({
         }
       }
     }
+  },
+  watch: {
+    sum(val) {
+      console.log('the newVal of sum is' + val)
+    }
+  },
+  data() {
+    return {
+      class: 'date',
+      base: 10,
+      arr: ['num1', {'num2': 2}, ['num3', 3]]
+    }
+  },
+  computed: {
+    sum() {
+      return this.base * 10
+    }
+  },
+  methods: {
+    update() {
+      this.base += 10
+    }
   }
 })
