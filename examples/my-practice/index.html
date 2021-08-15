@@ -5,8 +5,17 @@
 </head>
 <body>
     <div id="app">
-        <div :class="class" @click="update">$[sum]</div>
-        <balance></balance>
+        <!-- v-if -->
+        <button @click="switchShow">开关</button>
+        <div v-if="show">$[ show ? 'bad ass' : 'motherfucker' ]</div>
+        <!-- v-for -->
+        <ul>
+            <li v-for="food in foodList" :key="food.name">$[food.name]：￥ $[food.price]</li>
+        </ul>
+        <!-- v-model -->
+        <div><input v-model="text" /></div>
+        <!-- v-bind & event -->
+        <div :class="bindClass" @click="update">$[sum]</div>
     </div>
 
     <script src="../../dist/vue.js"></script>

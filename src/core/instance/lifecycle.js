@@ -147,7 +147,7 @@ export function mountComponent (
   hydrating?: boolean
 ): Component {
   vm.$el = el // 挂在组件时存储 $el
-  if (!vm.$options.render) { // 如果人为配置没有传入的 render
+  if (!vm.$options.render) { // 检查是否上一步进行编译后得到 render 函数
     vm.$options.render = createEmptyVNode // 返回一个虚拟节点
     if (process.env.NODE_ENV !== 'production') {
       /* istanbul ignore if */

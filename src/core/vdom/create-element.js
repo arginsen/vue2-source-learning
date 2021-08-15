@@ -29,7 +29,7 @@ const ALWAYS_NORMALIZE = 2
 export function createElement (
   context: Component,
   tag: any,
-  data: any,
+  data: any, // 节点对应的属性数据
   children: any,
   normalizationType: any,
   alwaysNormalize: boolean

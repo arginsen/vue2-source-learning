@@ -63,7 +63,7 @@ export function parseHTML (html, options) {
     last = html
     // Make sure we're not in a plaintext content element like script/style
     if (!lastTag || !isPlainTextElement(lastTag)) {
-      let textEnd = html.indexOf('<')
+      let textEnd = html.indexOf('<') // 标记开始标签
       if (textEnd === 0) {
         // Comment:
         if (comment.test(html)) {
@@ -73,7 +73,7 @@ export function parseHTML (html, options) {
             if (options.shouldKeepComment) {
               options.comment(html.substring(4, commentEnd), index, index + commentEnd + 3)
             }
-            advance(commentEnd + 3)
+            advance(commentEnd + 3) // --> 占三位
             continue
           }
         }

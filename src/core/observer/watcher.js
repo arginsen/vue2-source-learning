@@ -16,7 +16,7 @@ import Dep, { pushTarget, popTarget } from './dep'
 
 import type { SimpleSet } from '../util/index'
 
-let uid = 0
+let uid = 0 
 
 /**
  * A watcher parses an expression, collects dependencies,

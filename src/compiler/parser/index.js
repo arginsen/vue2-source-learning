@@ -296,8 +296,8 @@ export function parse (
       }
 
       if (!unary) {
-        currentParent = element
-        stack.push(element)
+        currentParent = element // 更新当前的父级，在之后的标签用以检查判断
+        stack.push(element) // 入栈
       } else {
         closeElement(element)
       }
@@ -534,12 +534,12 @@ export function parseFor (exp: string): ?ForParseResult {
 }
 
 function processIf (el) {
-  const exp = getAndRemoveAttr(el, 'v-if')
+  const exp = getAndRemoveAttr(el, 'v-if') // 获取 v-if 对应的变量
   if (exp) {
     el.if = exp
-    addIfCondition(el, {
+    addIfCondition(el, { // 给 v-if 添加 IfCondition
       exp: exp,
-      block: el
+      block: el // AST 树
     })
   } else {
     if (getAndRemoveAttr(el, 'v-else') != null) {
