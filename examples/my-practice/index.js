@@ -17,7 +17,7 @@ let app = new Vue({
       bindClass: 'date',
       base: 10,
       arr: ['num1', {'num2': 2}, ['num3', 3]],
-      show: false,
+      show: true,
       foodList: [{
           name: '葱',
           price: '10',
